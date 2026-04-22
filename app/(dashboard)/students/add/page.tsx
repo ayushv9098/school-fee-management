@@ -67,9 +67,6 @@ export default function AddStudentPage() {
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Ayushman Educational Academy
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Kundiya Dhaga Road, Sharhdi, Semli Bari
-        </Typography>
       </Box>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>
         Add New Student

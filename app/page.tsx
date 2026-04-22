@@ -1,3 +1,8 @@
+import { redirect } from 'next/navigation'
+
+export default function Page() {
+  redirect('/dashboard')
+} 
 const handleSubmit = async () => {
   if (!form.name || !form.class || !form.total_fee) {
     alert('Name, Class aur Fee required hai!')

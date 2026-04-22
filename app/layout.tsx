@@ -1,10 +1,4 @@
-import type { Metadata } from 'next'
-import Providers from './providers'
-
-export const metadata: Metadata = {
-  title: 'Ayushman Educational  - Fee Management',
-  description: 'School Fee Management System'
-}
+import ThemeRegistry from './ThemeRegistry'
 
 export default function RootLayout({
   children,
@@ -14,9 +8,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
+        <ThemeRegistry>
           {children}
-        </Providers>
+        </ThemeRegistry>
       </body>
     </html>
   )

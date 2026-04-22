@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import {
   Box, Grid, Card, CardContent, Typography,
-  CircularProgress, Chip
+  CircularProgress
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/app/lib/supabaseclient'
@@ -46,14 +46,38 @@ export default function DashboardPage() {
   ]
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box
+  sx={{
+    p: { xs: 2, md: 3 },
+    bgcolor: '#F6F9FC', // soft background
+    minHeight: '100vh'
+  }}
+>
       <Typography variant="h5" mb={3}>Dashboard</Typography>
 
       {/* Stat Cards */}
       <Grid container spacing={2} sx={{ mb: 4 }}>
-        {statCards.map(card => (
-          <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={card.label}>
-            <Card sx={{ height: '100%' }}>
+       {statCards.map(card => (
+  <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={card.label}>
+    <Card
+      onClick={() => {
+        if (card.label === 'Total Students') {
+          router.push('/students')
+        }
+        if (card.label === 'Fully Paid') {
+          router.push('/students?status=paid')
+        }
+      }}
+      sx={{
+        height: '100%',
+        cursor: 'pointer',
+        transition: '0.2s',
+        '&:hover': {
+          transform: 'translateY(-3px)',
+          boxShadow: '0 8px 20px rgba(0,0,0,0.08)'
+        }
+      }}
+    >
               <CardContent sx={{ p: '20px !important' }}>
                 <Typography variant="body2" color="text.secondary" mb={1}>
                   {card.label}
@@ -82,19 +106,22 @@ export default function DashboardPage() {
                   '&:hover': { boxShadow: '0 4px 20px rgba(0,0,0,0.12)' }
                 }}
               >
-                <CardContent sx={{ p: '20px !important' }}>
+                <CardContent sx={{ p: '16px !important' }}>
 
                   {/* Header */}
                   <Box sx={{ position: 'relative', mb: 2 }}>
-  <Chip
-    label={`${cls.total_students} students`}
-    size="small"
-    variant="outlined"
-    color="primary"
-    sx={{ position: 'absolute', top: 0, right: 0 }}
-  />
-  <Typography fontWeight={700} fontSize={16}>{cls.class}</Typography>
-</Box>
+                    <Box sx={{
+                      position: 'absolute', top: 0, right: 0,
+                      display: 'flex', alignItems: 'center', gap: 0.5,
+                      bgcolor: '#EEF2FF', borderRadius: 2, px: 1, py: 0.3
+                    }}>
+                      <PeopleIcon sx={{ fontSize: 13, color: '#6366F1' }} />
+                      <Typography sx={{ fontSize: 12, fontWeight: 600, color: '#6366F1' }}>
+                        {cls.total_students}
+                      </Typography>
+                    </Box>
+                    <Typography fontWeight={700} fontSize={16}>{cls.class}</Typography>
+                  </Box>
 
                   {/* Total Fee */}
                   <Box sx={{ borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', py: 1.5, mb: 2 }}>
@@ -106,18 +133,19 @@ export default function DashboardPage() {
 
                   {/* Progress Bar */}
                   <Box mb={2}>
-                    <Box display="flex" justifyContent="space-between" mb={0.8}>
-                      <Typography variant="caption" color="text.secondary">Collection Progress</Typography>
-                      <Typography variant="caption" fontWeight={700}
-                        color={pct >= 100 ? 'success.main' : pct > 50 ? 'warning.main' : 'error.main'}>
-                        {Math.round(pct)}%
-                      </Typography>
-                    </Box>
-                    <Box sx={{ height: 8, borderRadius: 4, bgcolor: '#eee', overflow: 'hidden' }}>
+                  <Box display="flex" justifyContent="space-between" mb={0.8}>
+  <Typography variant="caption" color="text.secondary">Collection Progress</Typography>
+  <Typography variant="caption" fontWeight={700} sx={{
+    color: pct >= 100 ? '#16A34A' : pct > 50 ? '#D97706' : '#DC2626'
+  }}>
+    {Math.round(pct)}%
+  </Typography>
+</Box>
+                    <Box sx={{ height: 7, borderRadius: 4, bgcolor: '#F3F4F6', overflow: 'hidden' }}>
                       <Box sx={{
                         height: '100%',
                         width: `${pct}%`,
-                        bgcolor: pct >= 100 ? '#2E7D32' : pct > 50 ? '#E65100' : '#C62828',
+                        bgcolor: pct >= 100 ? '#86EFAC' : pct > 50 ? '#FCD34D' : '#FCA5A5',
                         borderRadius: 4,
                         transition: 'width 0.3s ease'
                       }} />
@@ -125,14 +153,22 @@ export default function DashboardPage() {
                   </Box>
 
                   {/* Collected & Pending */}
-                  <Box sx={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-  <PeopleIcon sx={{ fontSize: 18, color: 'primary.main' }} />
-  <Typography variant="caption" fontWeight={700} color="primary.main">
-    {cls.total_students}
-  </Typography>
-</Box>
-                  <Typography variant="caption" color="primary"
-                    sx={{ mt: 2, display: 'block', fontWeight: 600 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.3, mb: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="body2" sx={{ color: '#6B7280' }}>● Collected</Typography>
+                      <Typography variant="body2" fontWeight={600} sx={{ color: '#16A34A' }}>
+                        {formatCurrency(cls.total_collected)}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="body2" sx={{ color: '#6B7280' }}>● Pending</Typography>
+                      <Typography variant="body2" fontWeight={600} sx={{ color: '#DC2626' }}>
+                        {formatCurrency(Math.max(cls.total_pending, 0))}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="caption" color="primary" sx={{ fontWeight: 600 }}>
                     View Students →
                   </Typography>
 

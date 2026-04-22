@@ -13,6 +13,8 @@ import PeopleIcon from '@mui/icons-material/People'
 import PaymentIcon from '@mui/icons-material/Payment'
 import SchoolIcon from '@mui/icons-material/School'
 import { usePathname, useRouter } from 'next/navigation'
+import InsightsIcon from '@mui/icons-material/Insights'
+
 
 const DRAWER_WIDTH = 240
 
@@ -21,6 +23,8 @@ const navItems = [
   { label: 'Students', icon: <PeopleIcon />, path: '/students' },
   { label: 'Payments', icon: <PaymentIcon />, path: '/payments' },
   { label: 'Classes', icon: <SchoolIcon />, path: '/classes' },
+  { label: 'AI Insights', icon: <InsightsIcon />, path: '/ai' },
+
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

@@ -8,23 +8,22 @@ import {
   Table, TableBody, TableCell, TableHead, TableRow,
   LinearProgress, Grid
 } from '@mui/material'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import dayjs from 'dayjs'
 import { formatCurrency, getStatusColor, getStatusLabel } from '@/app/lib/calculations'
 import { PAYMENT_MODES } from '@/app/lib/constants'
 import { supabase } from '@/app/lib/supabaseclient'
 import type { StudentWithFee, Payment } from '@/types'
-import { useParams } from 'next/navigation'
-
 
 export default function StudentDetailPage() {
-  const searchParams = useSearchParams()
   const { id } = useParams()
   const router = useRouter()
   const [student, setStudent] = useState<StudentWithFee | null>(null)
   const [payments, setPayments] = useState<Payment[]>([])
   const [open, setOpen] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
   const [payForm, setPayForm] = useState({
     amount: '', payment_mode: 'cash', note: ''
   })
@@ -40,18 +39,29 @@ export default function StudentDetailPage() {
   }, [id])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      void fetchData()
-    }, 0)
-
+    const timer = setTimeout(() => { void fetchData() }, 0)
     return () => clearTimeout(timer)
   }, [fetchData])
 
   const handlePayment = async () => {
     if (!payForm.amount) return
+
+    const amount = Number(payForm.amount)
+
+    if (amount <= 0) {
+      setError('Amount 0 se zyada hona chahiye!')
+      return
+    }
+
+    if (amount > student!.remaining_fee) {
+      setError(`Remaining fee ${formatCurrency(student!.remaining_fee)} se zyada amount nahi dal sakte!`)
+      return
+    }
+
+    setError('')
     await supabase.from('payments').insert({
       student_id: id,
-      amount: Number(payForm.amount),
+      amount: amount,
       payment_mode: payForm.payment_mode,
       note: payForm.note,
       payment_date: new Date().toISOString().split('T')[0]
@@ -62,27 +72,23 @@ export default function StudentDetailPage() {
     void fetchData()
   }
 
-  if (!student) return <Box sx={{ p: 3 }}><Typography>Loading...</Typography></Box>
+  if (!student) return (
+    <Box sx={{ p: 3 }}>
+      <Typography>Loading...</Typography>
+    </Box>
+  )
 
   const pct = student.total_fee > 0
-    ? (student.total_paid / student.total_fee) * 100 : 0
+    ? Math.min((student.total_paid / student.total_fee) * 100, 100) : 0
 
   return (
     <Box sx={{ p: 3, maxWidth: 900, mx: 'auto' }}>
       <Button onClick={() => router.back()} sx={{ mb: 2 }}>← Back</Button>
-      <Box
-        sx={{
-          mb: 3,
-          pb: 2,
-          borderBottom: '1px dashed #cfd8dc',
-          textAlign: 'center'
-        }}
-      >
+
+      {/* School Header */}
+      <Box sx={{ mb: 3, pb: 2, borderBottom: '1px dashed #cfd8dc', textAlign: 'center' }}>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Ayushman Educational Academy
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Kundiya Dhaga Road, Sharhdi, Semli Bari
         </Typography>
       </Box>
 
@@ -93,7 +99,7 @@ export default function StudentDetailPage() {
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 700 }}>{student.name}</Typography>
               <Typography color="text.secondary">
-                {student.class} • {student.mobile}
+                {student.class} • {student.mobile || 'No mobile'}
               </Typography>
               {student.guardian_name && (
                 <Typography variant="body2" color="text.secondary">
@@ -102,19 +108,38 @@ export default function StudentDetailPage() {
               )}
             </Box>
             <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Chip
-                label={getStatusLabel(student.status)}
-                color={getStatusColor(student.status)}
-                size="medium"
-              />
-              <Button variant="contained" onClick={() => setOpen(true)}
-                disabled={student.status === 'paid'}>
+            <Chip
+  label={getStatusLabel(student.status)}
+  sx={{
+    fontWeight: 500,
+    fontSize: '12px',
+    height: 26,
+    borderRadius: '15px',
+    bgcolor:
+      student.status === 'paid'
+        ? '#e8f5e9'
+        : '#fff3e0',
+    color:
+      student.status === 'paid'
+        ? '#2e7d32'
+        : '#ef6c00',
+    border:
+      student.status === 'paid'
+        ? '1px solid #c8e6c9'
+        : '1px solid #ffe0b2'
+  }}
+/>
+              <Button
+                variant="contained"
+                onClick={() => setOpen(true)}
+                disabled={student.status === 'paid'}
+              >
                 + Add Payment
               </Button>
             </Box>
           </Box>
 
-          {/* Fee Progress */}
+          {/* Fee Summary */}
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">Total Fee</Typography>
@@ -131,15 +156,23 @@ export default function StudentDetailPage() {
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">Remaining</Typography>
               <Typography variant="h6" sx={{ fontWeight: 700 }} color="error.main">
-                {formatCurrency(student.remaining_fee)}
+                {formatCurrency(Math.max(student.remaining_fee, 0))}
               </Typography>
             </Grid>
           </Grid>
+
+          {/* Progress Bar */}
           <Box sx={{ mt: 2 }}>
-            <LinearProgress variant="determinate" value={pct}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+              <Typography variant="caption" color="text.secondary">Payment Progress</Typography>
+              <Typography variant="caption" fontWeight={700}>{Math.round(pct)}%</Typography>
+            </Box>
+            <LinearProgress
+              variant="determinate"
+              value={pct}
               color={getStatusColor(student.status)}
-              sx={{ height: 10, borderRadius: 5 }} />
-            <Typography variant="caption">{Math.round(pct)}% paid</Typography>
+              sx={{ height: 7, borderRadius: 2 }}
+            />
           </Box>
         </CardContent>
       </Card>
@@ -168,7 +201,28 @@ export default function StudentDetailPage() {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Chip label={p.payment_mode.toUpperCase()} size="small" variant="outlined" />
+                <Chip
+  label={p.payment_mode.toUpperCase()}
+  size="small"
+  sx={{
+    bgcolor:
+      p.payment_mode === 'cash' ? '#F1F8E9' :
+      p.payment_mode === 'upi' ? '#E8F4FD' :
+      p.payment_mode === 'online' ? '#F8F0FF' : '#FFFDE7',
+    color:
+      p.payment_mode === 'cash' ? '#558B2F' :
+      p.payment_mode === 'upi' ? '#1976D2' :
+      p.payment_mode === 'online' ? '#7B1FA2' : '#F9A825',
+    border: '1px solid',
+    borderColor:
+      p.payment_mode === 'cash' ? '#C5E1A5' :
+      p.payment_mode === 'upi' ? '#BBDEFB' :
+      p.payment_mode === 'online' ? '#E1BEE7' : '#FFF176',
+    fontWeight: 600,
+    fontSize: 11,
+    borderRadius: 10,
+  }}
+/>
                 </TableCell>
                 <TableCell>{p.note || '-'}</TableCell>
               </TableRow>
@@ -176,7 +230,9 @@ export default function StudentDetailPage() {
             {payments.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} align="center">
-                  <Typography color="text.secondary" sx={{ py: 3 }}>No payments yet</Typography>
+                  <Typography color="text.secondary" sx={{ py: 3 }}>
+                    No payments yet
+                  </Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -185,40 +241,58 @@ export default function StudentDetailPage() {
       </Card>
 
       {/* Add Payment Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={open}
+        onClose={() => { setOpen(false); setError('') }}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>Add Payment — {student.name}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
             <TextField
               label={`Amount (Remaining: ${formatCurrency(student.remaining_fee)})`}
-              type="number" fullWidth
+              type="number"
+              fullWidth
               value={payForm.amount}
-              onChange={e => setPayForm({ ...payForm, amount: e.target.value })}
+              onChange={e => {
+                setPayForm({ ...payForm, amount: e.target.value })
+                setError('')
+              }}
             />
+            {error && (
+              <Alert severity="error">{error}</Alert>
+            )}
             <FormControl fullWidth>
               <InputLabel>Payment Mode</InputLabel>
-              <Select value={payForm.payment_mode} label="Payment Mode"
-                onChange={e => setPayForm({ ...payForm, payment_mode: e.target.value })}>
+              <Select
+                value={payForm.payment_mode}
+                label="Payment Mode"
+                onChange={e => setPayForm({ ...payForm, payment_mode: e.target.value })}
+              >
                 {PAYMENT_MODES.map(m => (
                   <MenuItem key={m.value} value={m.value}>{m.label}</MenuItem>
                 ))}
               </Select>
             </FormControl>
             <TextField
-              label="Note (optional)" fullWidth multiline rows={2}
+              label="Note (optional)"
+              fullWidth
+              multiline
+              rows={2}
               value={payForm.note}
               onChange={e => setPayForm({ ...payForm, note: e.target.value })}
             />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setOpen(false); setError('') }}>Cancel</Button>
           <Button variant="contained" onClick={handlePayment}>Save Payment</Button>
         </DialogActions>
       </Dialog>
 
       <Snackbar open={success} autoHideDuration={3000} onClose={() => setSuccess(false)}>
-        <Alert severity="success">Payment saved successfully!</Alert>
+        <Alert severity="success">Payment saved successfully! ✅</Alert>
       </Snackbar>
     </Box>
   )

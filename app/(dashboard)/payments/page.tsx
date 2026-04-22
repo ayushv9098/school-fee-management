@@ -4,9 +4,34 @@ import {
   Box, Typography, Card, Table, TableBody,
   TableCell, TableHead, TableRow, Chip, TextField
 } from '@mui/material'
-import { formatCurrency } from '@/app/lib/calculations'
 import { supabase } from '@/app/lib/supabaseclient'
+import { formatCurrency } from '@/app/lib/calculations'
 import dayjs from 'dayjs'
+
+const getPaymentChip = (mode: string) => (
+  <Chip
+    label={mode.toUpperCase()}
+    size="small"
+    sx={{
+      bgcolor:
+        mode === 'cash' ? '#F1F8E9' :
+        mode === 'upi' ? '#E8F4FD' :
+        mode === 'online' ? '#F8F0FF' : '#FFFDE7',
+      color:
+        mode === 'cash' ? '#558B2F' :
+        mode === 'upi' ? '#1976D2' :
+        mode === 'online' ? '#7B1FA2' : '#F9A825',
+      border: '1px solid',
+      borderColor:
+        mode === 'cash' ? '#C5E1A5' :
+        mode === 'upi' ? '#BBDEFB' :
+        mode === 'online' ? '#E1BEE7' : '#FFF176',
+      fontWeight: 600,
+      fontSize: 11,
+      borderRadius: 10,
+    }}
+  />
+)
 
 export default function PaymentsPage() {
   const [payments, setPayments] = useState<any[]>([])
@@ -28,17 +53,15 @@ export default function PaymentsPage() {
     p.students?.name?.toLowerCase().includes(search.toLowerCase())
   )
 
-  const modeColor: any = {
-    cash: 'success', upi: 'primary', online: 'info', cheque: 'warning'
-  }
-
   return (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>All Payments</Typography>
+      <Typography variant="h5" fontWeight={700} mb={3}>All Payments</Typography>
       <TextField
         placeholder="Search by student name..."
-        value={search} onChange={e => setSearch(e.target.value)}
-        size="small" sx={{ mb: 2, minWidth: 260 }}
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        size="small"
+        sx={{ mb: 2, minWidth: 260 }}
       />
       <Card>
         <Table>
@@ -60,18 +83,22 @@ export default function PaymentsPage() {
                 <TableCell>{p.students?.name}</TableCell>
                 <TableCell>{p.students?.class}</TableCell>
                 <TableCell>
-                  <Typography color="success.main" sx={{ fontWeight: 700 }}>
+                  <Typography color="success.main" fontWeight={700}>
                     {formatCurrency(p.amount)}
                   </Typography>
                 </TableCell>
-                <TableCell>
-                  <Chip label={p.payment_mode?.toUpperCase()}
-                    color={modeColor[p.payment_mode] ?? 'default'} size="small" />
-                </TableCell>
+                <TableCell>{getPaymentChip(p.payment_mode)}</TableCell>
                 <TableCell>{dayjs(p.payment_date).format('DD MMM YYYY')}</TableCell>
                 <TableCell>{p.note || '-'}</TableCell>
               </TableRow>
             ))}
+            {filtered.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  <Typography color="text.secondary" py={3}>No payments found</Typography>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </Card>
