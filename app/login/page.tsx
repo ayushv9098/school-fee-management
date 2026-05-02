@@ -32,7 +32,6 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      // लॉगिन सफल होने पर डैशबोर्ड पर रीडायरेक्ट
       router.push('/dashboard')
       router.refresh()
     }
@@ -52,7 +51,7 @@ export default function LoginPage() {
       <Card sx={{ maxWidth: 420, width: '100%', borderRadius: 4, boxShadow: 3 }}>
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}gutterBottom>
+            <Typography variant="h5" sx={{ fontWeight: 700, display: 'block', mb: 1 }}>
               Ayushman Educational Academy
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -81,7 +80,7 @@ export default function LoginPage() {
                     <Email fontSize="small" />
                   </InputAdornment>
                 ),
-              }}
+              } as const}
             />
 
             <TextField
@@ -105,7 +104,7 @@ export default function LoginPage() {
                     </IconButton>
                   </InputAdornment>
                 ),
-              }}
+              } as const}
             />
 
             <Button
