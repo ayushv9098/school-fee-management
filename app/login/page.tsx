@@ -37,6 +37,30 @@ export default function LoginPage() {
     }
   }
 
+  // इन्हें अलग से define कर दिया ताकि TypeScript को प्रॉब्लम न हो
+  const emailInputProps = {
+    startAdornment: (
+      <InputAdornment position="start">
+        <Email fontSize="small" />
+      </InputAdornment>
+    ),
+  }
+
+  const passwordInputProps = {
+    startAdornment: (
+      <InputAdornment position="start">
+        <Lock fontSize="small" />
+      </InputAdornment>
+    ),
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+          {showPassword ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  }
+
   return (
     <Box
       sx={{
@@ -51,7 +75,7 @@ export default function LoginPage() {
       <Card sx={{ maxWidth: 420, width: '100%', borderRadius: 4, boxShadow: 3 }}>
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
-            <Typography variant="h5" sx={{ fontWeight: 700, display: 'block', mb: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
               Ayushman Educational Academy
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -74,13 +98,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               sx={{ mb: 2 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email fontSize="small" />
-                  </InputAdornment>
-                ),
-              } as const}
+              InputProps={emailInputProps}
             />
 
             <TextField
@@ -91,20 +109,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               sx={{ mb: 3 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock fontSize="small" />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              } as const}
+              InputProps={passwordInputProps}
             />
 
             <Button
