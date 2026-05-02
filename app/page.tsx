@@ -1,13 +1,17 @@
-import { redirect } from 'next/navigation'
+'use client'
 
-export default function Page() {
-  redirect('/dashboard')
-} 
-const handleSubmit = async () => {
-  if (!form.name || !form.class || !form.total_fee) {
-    alert('Name, Class aur Fee required hai!')
-    return
-  }
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+export default function HomePage() {
+  const router = useRouter()
+  
+  useEffect(() => {
+    router.push('/dashboard')
+  }, [router])
+  
+  return null
+}
   setLoading(true)
   
   const { data, error } = await supabase.from('students').insert({
