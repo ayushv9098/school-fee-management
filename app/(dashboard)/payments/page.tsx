@@ -55,7 +55,7 @@ export default function PaymentsPage() {
 
   return (
     <Box>
-      <Typography variant="h5" fontWeight={700} mb={3}>All Payments</Typography>
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>All Payments</Typography>
       <TextField
         placeholder="Search by student name..."
         value={search}
@@ -83,7 +83,7 @@ export default function PaymentsPage() {
                 <TableCell>{p.students?.name}</TableCell>
                 <TableCell>{p.students?.class}</TableCell>
                 <TableCell>
-                  <Typography color="success.main" fontWeight={700}>
+                  <Typography color="success.main" sx={{ fontWeight: 700 }}>
                     {formatCurrency(p.amount)}
                   </Typography>
                 </TableCell>
@@ -95,7 +95,7 @@ export default function PaymentsPage() {
             {filtered.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7} align="center">
-                  <Typography color="text.secondary" py={3}>No payments found</Typography>
+                  <Typography color="text.secondary" sx={{ py: 3 }}>No payments found</Typography>
                 </TableCell>
               </TableRow>
             )}
