@@ -82,17 +82,15 @@ export default function StudentDetailPage() {
     ? Math.min((student.total_paid / student.total_fee) * 100, 100) : 0
 
   return (
-    <Box sx={{ p: 3, maxWidth: 900, mx: 'auto' }}>
+    <Box sx={{ p: 3, maxWidth: 900, mx: 'auto', overflowX: 'hidden' }}>
       <Button onClick={() => router.back()} sx={{ mb: 2 }}>← Back</Button>
 
-      {/* School Header */}
       <Box sx={{ mb: 3, pb: 2, borderBottom: '1px dashed #cfd8dc', textAlign: 'center' }}>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Ayushman Educational Academy
         </Typography>
       </Box>
 
-      {/* Student Info */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
@@ -107,28 +105,19 @@ export default function StudentDetailPage() {
                 </Typography>
               )}
             </Box>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            <Chip
-  label={getStatusLabel(student.status)}
-  sx={{
-    fontWeight: 500,
-    fontSize: '12px',
-    height: 26,
-    borderRadius: '15px',
-    bgcolor:
-      student.status === 'paid'
-        ? '#e8f5e9'
-        : '#fff3e0',
-    color:
-      student.status === 'paid'
-        ? '#2e7d32'
-        : '#ef6c00',
-    border:
-      student.status === 'paid'
-        ? '1px solid #c8e6c9'
-        : '1px solid #ffe0b2'
-  }}
-/>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Chip
+                label={getStatusLabel(student.status)}
+                sx={{
+                  fontWeight: 500,
+                  fontSize: '12px',
+                  height: 26,
+                  borderRadius: '15px',
+                  bgcolor: student.status === 'paid' ? '#e8f5e9' : '#fff3e0',
+                  color: student.status === 'paid' ? '#2e7d32' : '#ef6c00',
+                  border: student.status === 'paid' ? '1px solid #c8e6c9' : '1px solid #ffe0b2'
+                }}
+              />
               <Button
                 variant="contained"
                 onClick={() => setOpen(true)}
@@ -139,7 +128,6 @@ export default function StudentDetailPage() {
             </Box>
           </Box>
 
-          {/* Fee Summary */}
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">Total Fee</Typography>
@@ -161,11 +149,10 @@ export default function StudentDetailPage() {
             </Grid>
           </Grid>
 
-          {/* Progress Bar */}
           <Box sx={{ mt: 2 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
               <Typography variant="caption" color="text.secondary">Payment Progress</Typography>
-              <Typography variant="caption" fontWeight={700}>{Math.round(pct)}%</Typography>
+              <Typography variant="caption" sx={{ fontWeight: 700 }}>{Math.round(pct)}%</Typography>
             </Box>
             <LinearProgress
               variant="determinate"
@@ -177,10 +164,9 @@ export default function StudentDetailPage() {
         </CardContent>
       </Card>
 
-      {/* Payment History */}
       <Typography variant="h6" sx={{ mb: 2 }}>Payment History</Typography>
-      <Card>
-        <Table>
+      <Card sx={{ overflowX: 'auto' }}>
+        <Table sx={{ minWidth: 500 }}>
           <TableHead>
             <TableRow sx={{ bgcolor: '#f5f7fa' }}>
               <TableCell>#</TableCell>
@@ -201,28 +187,19 @@ export default function StudentDetailPage() {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                <Chip
-  label={p.payment_mode.toUpperCase()}
-  size="small"
-  sx={{
-    bgcolor:
-      p.payment_mode === 'cash' ? '#F1F8E9' :
-      p.payment_mode === 'upi' ? '#E8F4FD' :
-      p.payment_mode === 'online' ? '#F8F0FF' : '#FFFDE7',
-    color:
-      p.payment_mode === 'cash' ? '#558B2F' :
-      p.payment_mode === 'upi' ? '#1976D2' :
-      p.payment_mode === 'online' ? '#7B1FA2' : '#F9A825',
-    border: '1px solid',
-    borderColor:
-      p.payment_mode === 'cash' ? '#C5E1A5' :
-      p.payment_mode === 'upi' ? '#BBDEFB' :
-      p.payment_mode === 'online' ? '#E1BEE7' : '#FFF176',
-    fontWeight: 600,
-    fontSize: 11,
-    borderRadius: 10,
-  }}
-/>
+                  <Chip
+                    label={p.payment_mode.toUpperCase()}
+                    size="small"
+                    sx={{
+                      bgcolor: p.payment_mode === 'cash' ? '#F1F8E9' : p.payment_mode === 'upi' ? '#E8F4FD' : p.payment_mode === 'online' ? '#F8F0FF' : '#FFFDE7',
+                      color: p.payment_mode === 'cash' ? '#558B2F' : p.payment_mode === 'upi' ? '#1976D2' : p.payment_mode === 'online' ? '#7B1FA2' : '#F9A825',
+                      border: '1px solid',
+                      borderColor: p.payment_mode === 'cash' ? '#C5E1A5' : p.payment_mode === 'upi' ? '#BBDEFB' : p.payment_mode === 'online' ? '#E1BEE7' : '#FFF176',
+                      fontWeight: 600,
+                      fontSize: 11,
+                      borderRadius: 10,
+                    }}
+                  />
                 </TableCell>
                 <TableCell>{p.note || '-'}</TableCell>
               </TableRow>
@@ -240,13 +217,7 @@ export default function StudentDetailPage() {
         </Table>
       </Card>
 
-      {/* Add Payment Dialog */}
-      <Dialog
-        open={open}
-        onClose={() => { setOpen(false); setError('') }}
-        maxWidth="sm"
-        fullWidth
-      >
+      <Dialog open={open} onClose={() => { setOpen(false); setError('') }} maxWidth="sm" fullWidth>
         <DialogTitle>Add Payment — {student.name}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
@@ -255,34 +226,16 @@ export default function StudentDetailPage() {
               type="number"
               fullWidth
               value={payForm.amount}
-              onChange={e => {
-                setPayForm({ ...payForm, amount: e.target.value })
-                setError('')
-              }}
+              onChange={e => { setPayForm({ ...payForm, amount: e.target.value }); setError('') }}
             />
-            {error && (
-              <Alert severity="error">{error}</Alert>
-            )}
+            {error && <Alert severity="error">{error}</Alert>}
             <FormControl fullWidth>
               <InputLabel>Payment Mode</InputLabel>
-              <Select
-                value={payForm.payment_mode}
-                label="Payment Mode"
-                onChange={e => setPayForm({ ...payForm, payment_mode: e.target.value })}
-              >
-                {PAYMENT_MODES.map(m => (
-                  <MenuItem key={m.value} value={m.value}>{m.label}</MenuItem>
-                ))}
+              <Select value={payForm.payment_mode} label="Payment Mode" onChange={e => setPayForm({ ...payForm, payment_mode: e.target.value })}>
+                {PAYMENT_MODES.map(m => <MenuItem key={m.value} value={m.value}>{m.label}</MenuItem>)}
               </Select>
             </FormControl>
-            <TextField
-              label="Note (optional)"
-              fullWidth
-              multiline
-              rows={2}
-              value={payForm.note}
-              onChange={e => setPayForm({ ...payForm, note: e.target.value })}
-            />
+            <TextField label="Note (optional)" fullWidth multiline rows={2} value={payForm.note} onChange={e => setPayForm({ ...payForm, note: e.target.value })} />
           </Box>
         </DialogContent>
         <DialogActions>

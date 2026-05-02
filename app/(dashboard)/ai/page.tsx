@@ -181,7 +181,6 @@ export default function AIPage() {
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Collection Rate
               </Typography>
-              {/* Fixed Stack: alignItems moved to sx */}
               <Stack direction="row" sx={{ alignItems: 'center' }} spacing={2}>
                 <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                   <CircularProgress
@@ -297,7 +296,12 @@ export default function AIPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <RechartsTooltip formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Collection']} />
+                  <RechartsTooltip 
+                    formatter={(value: any) => {
+                      if (typeof value === 'number') return [`₹${value.toLocaleString()}`, 'Collection']
+                      return ['₹0', 'Collection']
+                    }}
+                  />
                   <Area type="monotone" dataKey="amount" stroke="#3B82F6" strokeWidth={3} fill="url(#blueGrad)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -318,7 +322,12 @@ export default function AIPage() {
                       <Cell key={`cell-${index}`} fill={index === 0 ? '#22C55E' : '#EF4444'} stroke="none" />
                     ))}
                   </Pie>
-                  <RechartsTooltip formatter={(value: number) => [`₹${value.toLocaleString()}`, '']} />
+                  <RechartsTooltip 
+                    formatter={(value: any) => {
+                      if (typeof value === 'number') return [`₹${value.toLocaleString()}`, '']
+                      return ['₹0', '']
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
               <Stack direction="row" justifyContent="center" spacing={2} sx={{ mt: 1 }}>

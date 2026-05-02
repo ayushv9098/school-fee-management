@@ -43,7 +43,6 @@ export default function StudentsPage() {
   
   useEffect(() => {
     const status = searchParams.get('status')
-    
     if (status) {
       setFilterStatus(status)
     }
@@ -55,7 +54,7 @@ export default function StudentsPage() {
       headerName: 'Student Name',
       flex: 1.5,
       minWidth: 140,
-      renderCell: (p) => <Typography variant="body2" fontWeight={600}>{p.value}</Typography>
+      renderCell: (p) => <Typography variant="body2" sx={{ fontWeight: 600 }}>{p.value}</Typography>
     },
     { field: 'class', headerName: 'Class', flex: 0.8, minWidth: 90 },
     {
@@ -77,14 +76,14 @@ export default function StudentsPage() {
       headerName: 'Paid',
       flex: 1,
       minWidth: 110,
-      renderCell: (p) => <Typography variant="body2" color="success.main" fontWeight={600}>{formatCurrency(p.value)}</Typography>
+      renderCell: (p) => <Typography variant="body2" color="success.main" sx={{ fontWeight: 600 }}>{formatCurrency(p.value)}</Typography>
     },
     {
       field: 'remaining_fee',
       headerName: 'Remaining',
       flex: 1,
       minWidth: 110,
-      renderCell: (p) => <Typography variant="body2" color={p.value > 0 ? 'error.main' : 'success.main'} fontWeight={600}>{formatCurrency(Math.max(p.value, 0))}</Typography>
+      renderCell: (p) => <Typography variant="body2" color={p.value > 0 ? 'error.main' : 'success.main'} sx={{ fontWeight: 600 }}>{formatCurrency(Math.max(p.value, 0))}</Typography>
     },
     {
       field: 'status',
@@ -118,24 +117,23 @@ export default function StudentsPage() {
         const color = p.row.status === 'paid' ? '#558B2F' : p.row.status === 'partial' ? '#E65100' : '#C62828'
         const bg = p.row.status === 'paid' ? '#F1F8E9' : p.row.status === 'partial' ? '#FFF3E0' : '#FFEBEE'
         return (
-            <Box sx={{ width: '100%', px: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ flex: 1, height: 6, borderRadius: 3, bgcolor: bg, overflow: 'hidden' }}>
-                <Box sx={{ height: '100%', width: `${pct}%`, bgcolor: color, borderRadius: 3 }} />
-              </Box>
-              <Typography variant="caption" color="text.secondary" sx={{ minWidth: 35 }}>
-                {Math.round(pct)}%
-              </Typography>
+          <Box sx={{ width: '100%', px: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ flex: 1, height: 6, borderRadius: 3, bgcolor: bg, overflow: 'hidden' }}>
+              <Box sx={{ height: '100%', width: `${pct}%`, bgcolor: color, borderRadius: 3 }} />
             </Box>
-          )
+            <Typography variant="caption" color="text.secondary" sx={{ minWidth: 35 }}>
+              {Math.round(pct)}%
+            </Typography>
+          </Box>
+        )
       }
     },
   ]
 
   return (
-    // ✅ Added overflowX hidden to prevent horizontal scroll on mobile
     <Box sx={{ p: 3, overflowX: 'hidden' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 1 }}>
-        <Typography variant="h5" fontWeight={700}>Students</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>Students</Typography>
         <Button variant="contained" onClick={() => router.push('/students/add')}>+ Add Student</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
@@ -160,28 +158,29 @@ export default function StudentsPage() {
           <Button variant="outlined" size="small" onClick={() => { setSearch(''); setFilterClass(''); setFilterStatus('') }}>Clear Filters</Button>
         )}
       </Box>
-      {/* ✅ Added overflowX auto so DataGrid scrolls horizontally on mobile */}
-      <Box sx={{ overflowX: 'auto' }}>
-        <DataGrid
-          rows={students}
-          columns={columns}
-          loading={loading}
-          autoHeight
-          rowHeight={60}
-          onRowClick={(p) => {
+      <Box sx={{ width: '100%', overflowX: 'auto' }}>
+        <Box sx={{ minWidth: 900 }}>
+          <DataGrid
+            rows={students}
+            columns={columns}
+            loading={loading}
+            autoHeight
+            rowHeight={60}
+            onRowClick={(p) => {
               console.log('Row clicked:', p.row.id)
               router.push(`/students/${p.row.id}`)
             }}
-          sx={{
-            bgcolor: 'white',
-            borderRadius: 2,
-            cursor: 'pointer',
-            '& .MuiDataGrid-columnHeaders': { bgcolor: '#f5f7fa' },
-            '& .MuiDataGrid-row:hover': { bgcolor: '#f0f7ff' },
-            '& .MuiDataGrid-cell': { display: 'flex', alignItems: 'center' },
-          }}
-          initialState={{ pagination: { paginationModel: { pageSize: 25 } } }}
-        />
+            sx={{
+              bgcolor: 'white',
+              borderRadius: 2,
+              cursor: 'pointer',
+              '& .MuiDataGrid-columnHeaders': { bgcolor: '#f5f7fa' },
+              '& .MuiDataGrid-row:hover': { bgcolor: '#f0f7ff' },
+              '& .MuiDataGrid-cell': { display: 'flex', alignItems: 'center' },
+            }}
+            initialState={{ pagination: { paginationModel: { pageSize: 25 } } }}
+          />
+        </Box>
       </Box>
     </Box>
   )

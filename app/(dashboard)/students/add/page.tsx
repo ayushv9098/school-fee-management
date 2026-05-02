@@ -54,16 +54,9 @@ export default function AddStudentPage() {
   }
 
   return (
-    <Box sx={{ p: 3, maxWidth: 700, mx: 'auto' }}>
+    <Box sx={{ p: 3, maxWidth: 700, mx: 'auto', overflowX: 'hidden' }}>
       <Button onClick={() => router.back()} sx={{ mb: 2 }}>← Back</Button>
-      <Box
-        sx={{
-          mb: 3,
-          pb: 2,
-          borderBottom: '1px dashed #cfd8dc',
-          textAlign: 'center'
-        }}
-      >
+      <Box sx={{ mb: 3, pb: 2, borderBottom: '1px dashed #cfd8dc', textAlign: 'center' }}>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Ayushman Educational Academy
         </Typography>
@@ -76,92 +69,48 @@ export default function AddStudentPage() {
         <CardContent>
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                fullWidth label="Student Name *"
-                value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
-              />
+              <TextField fullWidth label="Student Name *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Class *</InputLabel>
-                <Select
-                  value={form.class} label="Class *"
-                  onChange={e => setForm({ ...form, class: e.target.value })}>
-                  {CLASS_LIST.map(c => (
-                    <MenuItem key={c} value={c}>{c}</MenuItem>
-                  ))}
+                <Select value={form.class} label="Class *" onChange={e => setForm({ ...form, class: e.target.value })}>
+                  {CLASS_LIST.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
                 </Select>
               </FormControl>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                fullWidth label="Mobile Number"
-                value={form.mobile}
-                onChange={e => setForm({ ...form, mobile: e.target.value })}
-              />
+              <TextField fullWidth label="Mobile Number" value={form.mobile} onChange={e => setForm({ ...form, mobile: e.target.value })} />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                fullWidth label="Guardian Name"
-                value={form.guardian_name}
-                onChange={e => setForm({ ...form, guardian_name: e.target.value })}
-              />
+              <TextField fullWidth label="Guardian Name" value={form.guardian_name} onChange={e => setForm({ ...form, guardian_name: e.target.value })} />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <TextField
-                fullWidth label="Address"
-                value={form.address}
-                onChange={e => setForm({ ...form, address: e.target.value })}
-              />
+              <TextField fullWidth label="Address" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                fullWidth label="Total Fee (₹) *"
-                type="number"
-                value={form.total_fee}
-                onChange={e => setForm({ ...form, total_fee: e.target.value })}
-              />
+              <TextField fullWidth label="Total Fee (₹) *" type="number" value={form.total_fee} onChange={e => setForm({ ...form, total_fee: e.target.value })} />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Academic Year</InputLabel>
-                <Select
-                  value={form.academic_year} label="Academic Year"
-                  onChange={e => setForm({ ...form, academic_year: e.target.value })}>
-                  {ACADEMIC_YEARS.map(y => (
-                    <MenuItem key={y} value={y}>{y}</MenuItem>
-                  ))}
+                <Select value={form.academic_year} label="Academic Year" onChange={e => setForm({ ...form, academic_year: e.target.value })}>
+                  {ACADEMIC_YEARS.map(y => <MenuItem key={y} value={y}>{y}</MenuItem>)}
                 </Select>
               </FormControl>
             </Grid>
-
-            {error && (
-              <Grid size={{ xs: 12 }}>
-                <Alert severity="error">{error}</Alert>
-              </Grid>
-            )}
-
+            {error && <Grid size={{ xs: 12 }}><Alert severity="error">{error}</Alert></Grid>}
             <Grid size={{ xs: 12 }}>
               <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-                <Button
-                  variant="contained" fullWidth
-                  onClick={handleSubmit}
-                  disabled={loading}>
-                  {loading ? 'Saving...' : 'Add Student'}
-                </Button>
-                <Button
-                  variant="outlined" fullWidth
-                  onClick={() => router.back()}>
-                  Cancel
-                </Button>
+                <Button variant="contained" fullWidth onClick={handleSubmit} disabled={loading}>{loading ? 'Saving...' : 'Add Student'}</Button>
+                <Button variant="outlined" fullWidth onClick={() => router.back()}>Cancel</Button>
               </Box>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
 
-      <Snackbar open={success} autoHideDuration={2000}>
+      <Snackbar open={success} autoHideDuration={2000} onClose={() => setSuccess(false)}>
         <Alert severity="success">Student added successfully! ✅</Alert>
       </Snackbar>
     </Box>
