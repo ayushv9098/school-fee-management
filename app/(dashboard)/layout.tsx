@@ -149,17 +149,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               onClose={handleMenuClose}
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-              PaperProps={{
-                sx: {
-                  mt: 1.5,
-                  minWidth: 200,
-                  borderRadius: 2,
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                }
+              sx={{
+                mt: 1.5,
+                minWidth: 200,
+                borderRadius: 2,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
               }}
             >
               <Box sx={{ px: 2, py: 1 }}>
-                <Typography variant="subtitle2" fontWeight={600} noWrap>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }} noWrap>
                   {user?.email || 'Admin'}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -174,7 +172,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                // ... बाकी props
                    >
                   <Box sx={{ px: 2, py: 1 }}>
-                  <Typography variant="subtitle2" fontWeight={600} noWrap>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }} noWrap>
                    {user?.email || 'Admin'}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">

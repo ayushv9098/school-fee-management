@@ -330,7 +330,7 @@ export default function AIPage() {
                   />
                 </PieChart>
               </ResponsiveContainer>
-              <Stack direction="row" justifyContent="center" spacing={2} sx={{ mt: 1 }}>
+              <Stack direction="row" sx={{ justifyContent: 'center', alignItems: 'center', mt: 1 }} spacing={2}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Box sx={{ width: 12, height: 12, borderRadius: 1, bgcolor: '#22C55E' }} />
                   <Typography variant="caption">Paid</Typography>
