@@ -52,7 +52,7 @@ export default function LoginPage() {
       <Card sx={{ maxWidth: 420, width: '100%', borderRadius: 4, boxShadow: 3 }}>
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
-            <Typography variant="h5" fontWeight={700} gutterBottom>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}gutterBottom>
               Ayushman Educational Academy
             </Typography>
             <Typography variant="body2" color="text.secondary">
