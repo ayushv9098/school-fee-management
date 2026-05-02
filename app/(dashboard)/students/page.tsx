@@ -132,8 +132,9 @@ export default function StudentsPage() {
   ]
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+    // ✅ Added overflowX hidden to prevent horizontal scroll on mobile
+    <Box sx={{ p: 3, overflowX: 'hidden' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="h5" fontWeight={700}>Students</Typography>
         <Button variant="contained" onClick={() => router.push('/students/add')}>+ Add Student</Button>
       </Box>
@@ -159,26 +160,29 @@ export default function StudentsPage() {
           <Button variant="outlined" size="small" onClick={() => { setSearch(''); setFilterClass(''); setFilterStatus('') }}>Clear Filters</Button>
         )}
       </Box>
-      <DataGrid
-        rows={students}
-        columns={columns}
-        loading={loading}
-        autoHeight
-        rowHeight={60}
-        onRowClick={(p) => {
-            console.log('Row clicked:', p.row.id)
-            router.push(`/students/${p.row.id}`)
+      {/* ✅ Added overflowX auto so DataGrid scrolls horizontally on mobile */}
+      <Box sx={{ overflowX: 'auto' }}>
+        <DataGrid
+          rows={students}
+          columns={columns}
+          loading={loading}
+          autoHeight
+          rowHeight={60}
+          onRowClick={(p) => {
+              console.log('Row clicked:', p.row.id)
+              router.push(`/students/${p.row.id}`)
+            }}
+          sx={{
+            bgcolor: 'white',
+            borderRadius: 2,
+            cursor: 'pointer',
+            '& .MuiDataGrid-columnHeaders': { bgcolor: '#f5f7fa' },
+            '& .MuiDataGrid-row:hover': { bgcolor: '#f0f7ff' },
+            '& .MuiDataGrid-cell': { display: 'flex', alignItems: 'center' },
           }}
-        sx={{
-          bgcolor: 'white',
-          borderRadius: 2,
-          cursor: 'pointer',
-          '& .MuiDataGrid-columnHeaders': { bgcolor: '#f5f7fa' },
-          '& .MuiDataGrid-row:hover': { bgcolor: '#f0f7ff' },
-          '& .MuiDataGrid-cell': { display: 'flex', alignItems: 'center' },
-        }}
-        initialState={{ pagination: { paginationModel: { pageSize: 25 } } }}
-      />
+          initialState={{ pagination: { paginationModel: { pageSize: 25 } } }}
+        />
+      </Box>
     </Box>
   )
 }

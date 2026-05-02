@@ -122,7 +122,7 @@ export default function ProfilePage() {
           {activeSection === 'profile' && (
             <Card sx={{ borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
               <CardContent sx={{ p: 4 }}>
-                <Typography variant="h6" fontWeight={700} sx={{ mb: 3 }}>
+                <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
                   Personal Information
                 </Typography>
 
@@ -175,7 +175,7 @@ export default function ProfilePage() {
           {activeSection === 'security' && (
             <Card sx={{ borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
               <CardContent sx={{ p: 4 }}>
-                <Typography variant="h6" fontWeight={700} sx={{ mb: 3 }}>
+                <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
                   Change Password
                 </Typography>
 

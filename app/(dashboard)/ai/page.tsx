@@ -118,7 +118,7 @@ export default function AIPage() {
   return (
     <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: '#F9FAFB', minHeight: '100vh' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h5" fontWeight={700} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="h5" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
           🧠 AI Insights
         </Typography>
         <Select
@@ -133,16 +133,14 @@ export default function AIPage() {
         </Select>
       </Box>
 
-      {/* ✅ सही किया गया Grid Container - तीनों कार्ड इसमें हैं */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        {/* Total Collection */}
         <Grid size={{ xs: 12, md: 4 }}>
           <Card sx={{ borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Total Collection
               </Typography>
-              <Typography variant="h4" fontWeight={800} sx={{ mb: 1 }}>
+              <Typography variant="h4" sx={{ fontWeight: 400, mb: 1 }}>
                 ₹{totalCollection.toLocaleString()}
               </Typography>
               {totalCollection > 0 && (
@@ -161,14 +159,13 @@ export default function AIPage() {
           </Card>
         </Grid>
 
-        {/* Pending Fees */}
         <Grid size={{ xs: 12, md: 4 }}>
           <Card sx={{ borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', borderLeft: '6px solid #EF4444' }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 ⚠️ Pending Fees
               </Typography>
-              <Typography variant="h4" fontWeight={800} sx={{ mb: 1, color: '#B91C1C' }}>
+              <Typography variant="h4" sx={{ fontWeight: 400, mb: 1, color: '#B91C1C' }}>
                 ₹{pendingFees.toLocaleString()}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -178,7 +175,6 @@ export default function AIPage() {
           </Card>
         </Grid>
 
-        {/* Collection Rate */}
         <Grid size={{ xs: 12, md: 4 }}>
           <Card sx={{ borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <CardContent>
@@ -190,7 +186,7 @@ export default function AIPage() {
                   <CircularProgress
                     variant="determinate"
                     value={collectionRate}
-                    size={70}
+                    size={50}
                     thickness={5}
                     sx={{ color: getProgressColor() }}
                   />
@@ -201,7 +197,7 @@ export default function AIPage() {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                    <Typography variant="body1" fontWeight={700}>
+                    <Typography variant="body1" sx={{ fontWeight: 400 }}>
                       {collectionRate}%
                     </Typography>
                   </Box>
@@ -220,7 +216,7 @@ export default function AIPage() {
       <Card sx={{ mb: 3, borderRadius: 3, bgcolor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <TrendingUp sx={{ color: '#2563EB' }} />
-          <Typography variant="body2" fontWeight={500}>
+          <Typography variant="body2" sx={{ fontWeight: 500 }}>
             📈 इस महीने के अंत तक अनुमानित कलेक्शन: 
             <strong style={{ marginLeft: 8 }}>₹{predictedCollection.toLocaleString()}</strong>
           </Typography>
@@ -229,7 +225,7 @@ export default function AIPage() {
 
       <Card sx={{ borderRadius: 4, mb: 3, boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
         <CardContent>
-          <Typography fontWeight={700} sx={{ mb: 2 }}>🧠 Smart Insights</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 2 }}>🧠 Smart Insights</Typography>
           <Divider sx={{ mb: 2 }} />
           <Stack spacing={1.5}>
             {smartInsights.map((text, i) => (
@@ -244,7 +240,7 @@ export default function AIPage() {
 
       <Card sx={{ borderRadius: 4, mb: 3, boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
         <CardContent>
-          <Typography fontWeight={700} sx={{ mb: 2 }}>🧑‍🎓 Top Late Parents</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 2 }}>🧑‍🎓 Top Late Parents</Typography>
           {lateParents.length === 0 ? (
             <Typography color="text.secondary" sx={{ py: 2, textAlign: 'center' }}>
               No pending fees 🎉
@@ -265,19 +261,12 @@ export default function AIPage() {
                   }}
                 >
                   <Typography
-                    fontWeight={600}
+                    sx={{ fontWeight: 500, cursor: 'pointer', '&:hover': { color: '#3B82F6', textDecoration: 'underline' } }}
                     onClick={() => router.push(`/students/${item.id}`)}
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': {
-                        color: '#3B82F6',
-                        textDecoration: 'underline'
-                      }
-                    }}
                   >
                     {item.name}
                   </Typography>
-                  <Typography variant="body2" fontWeight={600} color="error">
+                  <Typography variant="body2" sx={{ fontWeight: 600 }} color="error">
                     ₹{item.pending.toLocaleString()}
                   </Typography>
                 </Box>
@@ -291,7 +280,7 @@ export default function AIPage() {
         <Grid size={{ xs: 12, md: 7 }}>
           <Card sx={{ borderRadius: 4, height: '100%' }}>
             <CardContent>
-              <Typography fontWeight={700} sx={{ mb: 2 }}>
+              <Typography sx={{ fontWeight: 700, mb: 2 }}>
                 📊 Monthly Collection Trend
               </Typography>
               <ResponsiveContainer width="100%" height={260}>
@@ -316,7 +305,7 @@ export default function AIPage() {
         <Grid size={{ xs: 12, md: 5 }}>
           <Card sx={{ borderRadius: 4, height: '100%' }}>
             <CardContent>
-              <Typography fontWeight={700} sx={{ mb: 1 }}>
+              <Typography sx={{ fontWeight: 700, mb: 1 }}>
                 💰 Paid vs Pending
               </Typography>
               <ResponsiveContainer width="100%" height={240}>
