@@ -117,7 +117,7 @@ export default function AIPage() {
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: '#F9FAFB', minHeight: '100vh' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="h5" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
           🧠 AI Insights
         </Typography>
@@ -140,7 +140,7 @@ export default function AIPage() {
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Total Collection
               </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 400, mb: 1 }}>
+              <Typography variant="h4" sx={{ fontWeight: 800, mb: 1 }}>
                 ₹{totalCollection.toLocaleString()}
               </Typography>
               {totalCollection > 0 && (
@@ -165,7 +165,7 @@ export default function AIPage() {
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 ⚠️ Pending Fees
               </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 400, mb: 1, color: '#B91C1C' }}>
+              <Typography variant="h4" sx={{ fontWeight: 800, mb: 1, color: '#B91C1C' }}>
                 ₹{pendingFees.toLocaleString()}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -186,7 +186,7 @@ export default function AIPage() {
                   <CircularProgress
                     variant="determinate"
                     value={collectionRate}
-                    size={50}
+                    size={70}
                     thickness={5}
                     sx={{ color: getProgressColor() }}
                   />
@@ -197,7 +197,7 @@ export default function AIPage() {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                    <Typography variant="body1" sx={{ fontWeight: 400 }}>
+                    <Typography variant="body1" sx={{ fontWeight: 700 }}>
                       {collectionRate}%
                     </Typography>
                   </Box>
@@ -214,7 +214,7 @@ export default function AIPage() {
       </Grid>
 
       <Card sx={{ mb: 3, borderRadius: 3, bgcolor: '#EFF6FF', border: '1px solid #BFDBFE' }}>
-        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
           <TrendingUp sx={{ color: '#2563EB' }} />
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
             📈 इस महीने के अंत तक अनुमानित कलेक्शन: 
@@ -257,11 +257,13 @@ export default function AIPage() {
                     p: 1.5,
                     bgcolor: '#FFF8F0',
                     borderRadius: 2,
-                    border: '1px solid #FFEDD5'
+                    border: '1px solid #FFEDD5',
+                    flexWrap: 'wrap',
+                    gap: 1
                   }}
                 >
                   <Typography
-                    sx={{ fontWeight: 500, cursor: 'pointer', '&:hover': { color: '#3B82F6', textDecoration: 'underline' } }}
+                    sx={{ fontWeight: 600, cursor: 'pointer', '&:hover': { color: '#3B82F6', textDecoration: 'underline' } }}
                     onClick={() => router.push(`/students/${item.id}`)}
                   >
                     {item.name}
