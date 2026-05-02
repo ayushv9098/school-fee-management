@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Box, Card, CardContent, TextField, Button,
+  Box, Card, CardContent, Button,
   Typography, Alert, CircularProgress, InputAdornment,
-  IconButton
+  IconButton, OutlinedInput, FormControl, InputLabel
 } from '@mui/material'
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material'
 import { supabase } from '@/app/lib/supabaseclient'
@@ -37,30 +37,6 @@ export default function LoginPage() {
     }
   }
 
-  // इन्हें अलग से define कर दिया ताकि TypeScript को प्रॉब्लम न हो
-  const emailInputProps = {
-    startAdornment: (
-      <InputAdornment position="start">
-        <Email fontSize="small" />
-      </InputAdornment>
-    ),
-  }
-
-  const passwordInputProps = {
-    startAdornment: (
-      <InputAdornment position="start">
-        <Lock fontSize="small" />
-      </InputAdornment>
-    ),
-    endAdornment: (
-      <InputAdornment position="end">
-        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-          {showPassword ? <VisibilityOff /> : <Visibility />}
-        </IconButton>
-      </InputAdornment>
-    ),
-  }
-
   return (
     <Box
       sx={{
@@ -90,27 +66,48 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleLogin}>
-            <TextField
-              fullWidth
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              sx={{ mb: 2 }}
-              InputProps={emailInputProps}
-            />
+            {/* Email Field */}
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel htmlFor="email-input">Email</InputLabel>
+              <OutlinedInput
+                id="email-input"
+                type="email"
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Email fontSize="small" />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
 
-            <TextField
-              fullWidth
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              sx={{ mb: 3 }}
-              InputProps={passwordInputProps}
-            />
+            {/* Password Field */}
+            <FormControl fullWidth sx={{ mb: 3 }}>
+              <InputLabel htmlFor="password-input">Password</InputLabel>
+              <OutlinedInput
+                id="password-input"
+                type={showPassword ? 'text' : 'password'}
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Lock fontSize="small" />
+                  </InputAdornment>
+                }
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
 
             <Button
               type="submit"
