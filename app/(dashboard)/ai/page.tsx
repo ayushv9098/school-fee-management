@@ -181,7 +181,8 @@ export default function AIPage() {
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Collection Rate
               </Typography>
-              <Stack direction="row" alignItems="center" spacing={2}>
+              {/* Fixed Stack: alignItems moved to sx */}
+              <Stack direction="row" sx={{ alignItems: 'center' }} spacing={2}>
                 <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                   <CircularProgress
                     variant="determinate"
